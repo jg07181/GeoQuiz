@@ -1,5 +1,6 @@
 package com.example.geoquiz;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -13,6 +14,7 @@ public class QuizActivity extends AppCompatActivity {
     private Button mFalseButton;
     private Button mPrevioudButton;
     private Button mNextButton;
+    private Button mCheatButton;
     private TextView mQuestionTextView;
 
     private Question[] mQuestionBank = new Question[] {
@@ -39,14 +41,18 @@ public class QuizActivity extends AppCompatActivity {
         Toast.makeText(this, messageResID, Toast.LENGTH_SHORT).show();
     }
 
+    private void updateQuestion() {
+        int question = mQuestionBank[mCurrentIndex].getTextResID();
+        mQuestionTextView.setText(question);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
 
         mQuestionTextView = (TextView) findViewById(R.id.question_text_view);
-        int question = mQuestionBank[mCurrentIndex].getTextResID();
-        mQuestionTextView.setText(question);
+        updateQuestion();
 
         mTrueButton = (Button) findViewById(R.id.true_button);
         mTrueButton.setOnClickListener(new View.OnClickListener() {
@@ -71,8 +77,9 @@ public class QuizActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 mCurrentIndex = (mCurrentIndex - 1) % mQuestionBank.length;
-                int question = mQuestionBank[mCurrentIndex].getTextResID();
-                mQuestionTextView.setText(question);
+                //int question = mQuestionBank[mCurrentIndex].getTextResID();
+                //mQuestionTextView.setText(question);
+                updateQuestion();
             }
         });
 
@@ -81,8 +88,18 @@ public class QuizActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.length;
-                int question = mQuestionBank[mCurrentIndex].getTextResID();
-                mQuestionTextView.setText(question);
+                //int question = mQuestionBank[mCurrentIndex].getTextResID();
+                //mQuestionTextView.setText(question);
+                updateQuestion();
+            }
+        });
+
+        mCheatButton = findViewById(R.id.cheat_button);
+        mCheatButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(QuizActivity.this, CheatActivity.class);
+                startActivity(i);
             }
         });
     }
